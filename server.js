@@ -8,7 +8,6 @@ const server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 3002, routes: { cors: true } });
 
 server.register(require('inert'), (err) => {
-
     if (err) {
         throw err;
     }
@@ -30,6 +29,11 @@ server.route({
         }
     }
 });
+
+server.on('response', function (request) {
+    console.log(request.info.remoteAddress + ': ' + request.method.toUpperCase() + ' ' + request.url.path + ' --> ' + request.response.statusCode);
+});
+
 
 });
 server.start((err) => {
